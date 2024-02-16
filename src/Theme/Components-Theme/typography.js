@@ -1,8 +1,8 @@
 import { themeBreakPoints } from './breakPoints';
 
 const fontFamilies = {
-  Roboto: '"Roboto","Helvetica", "Arial" sans-serif',
-  // satoshi: "'Manrope', sans-serif"
+  Roboto: "'Roboto','Helvetica', 'Arial', sans-serif",
+
 
 };
 
