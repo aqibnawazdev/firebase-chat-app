@@ -1,13 +1,17 @@
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
+import MainContainer from "./components/containers/MainContainer";
+import MessagesContainer from "./components/containers/MessagesContainer";
+import SideBar from "./components/sidebar/SideBar";
+import Users from "./components/users/Users";
 function App() {
   return (
-    <>
-      <Button variant="contained" color="primary">
-        Primary
-      </Button>
-    </>
+    <MainContainer>
+      <SideBar />
+      <Users />
+      <MessagesContainer />
+    </MainContainer>
   );
 }
 
