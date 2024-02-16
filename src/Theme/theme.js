@@ -16,7 +16,8 @@ const theme = createTheme({
   },
 
   palette: {
-    ...colorObject
+    ...colorObject,
+    red: colorObject.notificationRed
   },
   typography: typography(),
 

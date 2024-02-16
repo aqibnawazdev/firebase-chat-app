@@ -9,7 +9,8 @@ const colorObject = {
   textDark: "#303030",
   textWhite: '#FFFFFF',
   statusOnline: "#27AE60",
-  statusOffline: "#"
+  statusOffline: "#E7E7E7",
+  bgWhite: "#fff"
 };
 
 export { colorObject };
