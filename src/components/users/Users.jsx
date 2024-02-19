@@ -53,13 +53,9 @@ function Users() {
             People
           </Typography>
           <UserCard />
-          <hr />
           <UserCard badge={true} />
-          <hr />
           <UserCard badge={false} />
-          <hr />
           <UserCard badge={true} />
-          <hr />
         </Paper>
       </Grid>
     </UsersContainer>

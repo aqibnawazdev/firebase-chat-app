@@ -7,7 +7,7 @@ function MainContainer({ children }) {
     <Grid
       container
       bgcolor={colorObject.bodyBgPrimary}
-      justifyContent={"space-between"}
+      justifyContent={"space-around"}
       height={"100vh"}
     >
       {children}

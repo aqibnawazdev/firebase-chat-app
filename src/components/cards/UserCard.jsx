@@ -7,10 +7,10 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import { colorObject } from "../../Theme/customColors";
-function UserCard({ badge }) {
+function UserCard({ badge, status }) {
   return (
     <Card
-      elevation={false}
+      elevation="false"
       sx={{
         borderBottom: "1px solid #B4ABAB",
         width: "100%",
@@ -22,7 +22,7 @@ function UserCard({ badge }) {
       <CardHeader
         avatar={<Avatar aria-label="recipe" src="./images/user-billgate.png" />}
         title="Bill Gate"
-        subheader="last message"
+        subheader={status ? status : "Last message"}
       />
       <Box
         sx={{
@@ -33,11 +33,15 @@ function UserCard({ badge }) {
           alignItems: "center",
         }}
       >
-        <Typography variant="subtitle2" component={"span"}>
-          Today, 9:00pm
-        </Typography>
-        {badge ? (
-          <Badge badgeContent={2} color="secondary" sx={{ marginTop: 2 }} />
+        {status ? (
+          ""
+        ) : badge ? (
+          <>
+            <Typography variant="subtitle2" component={"span"}>
+              Today, 9:00pm
+            </Typography>
+            <Badge badgeContent={2} color="secondary" sx={{ marginTop: 2 }} />
+          </>
         ) : (
           <Avatar
             src="./images/tick-double.png"
