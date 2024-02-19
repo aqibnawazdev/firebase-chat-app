@@ -13,21 +13,21 @@ import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
+import { Facebook, Google } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 const defaultTheme = createTheme();
-import { Google } from "@mui/icons-material";
-export default function Login() {
+
+export default function ForgotPassword() {
+  const [isResetLinkSent, setIsResetLinkSent] = React.useState(false);
+
+  const navigate = useNavigate();
   const showToastMessage = (message) => {
-    if (message === "Logged in Successfully...") {
+    if (message === "Success, Check you email inbox") {
       toast.success(message, {
         position: "top-right",
         autoClose: 3000,
@@ -47,44 +47,31 @@ export default function Login() {
       });
     }
   };
-
-  const handleSubmit = (event) => {
+  const handleNavigate = () => {
+    navigate("/login");
+  };
+  const handlePasswordReset = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
-    const password = data.get("password");
-  };
-
-  const handleGoogleAuth = () => {
     const auth = getAuth();
-    const provider = new GoogleAuthProvider();
-    provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+    sendPasswordResetEmail(auth, email)
+      .then((n) => {
+        console.log(n);
+        showToastMessage("Success, Check you email inbox");
+        setIsResetLinkSent(true);
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        showToastMessage(errorMessage);
       });
   };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
+
         <Box
           sx={{
             marginTop: 8,
@@ -97,72 +84,60 @@ export default function Login() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            {isResetLinkSent
+              ? "Please Check you email to reset your password and comeback to signin"
+              : "Reset Password"}
           </Typography>
 
           <ToastContainer />
           <Box
             component="form"
-            onSubmit={(e) => {
-              handleSubmit(e);
-            }}
+            onSubmit={(event) => handlePasswordReset(event)}
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
+            {isResetLinkSent ? (
+              ""
+            ) : (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="email"
+                label="Enter your reset email"
+                type="email"
+                id="email"
+              />
+            )}
+            {isResetLinkSent ? (
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                sx={{ mt: 3, mb: 2 }}
+                onClick={handleNavigate}
+              >
+                Click to Signin
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Send Reset Link
+              </Button>
+            )}
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="secondary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
             <Grid container>
-              <Grid item xs>
-                <Link to="/passwordreset" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-
               <Grid item>
                 <Link to="/register" variant="body2">
                   {"Don't have an account? Register"}
                 </Link>
               </Grid>
             </Grid>
-            <Typography textAlign="center" color="secondary">
-              or
-            </Typography>
-            <Stack spacing={2} sx={{ marginBottom: "20px", marginTop: "20px" }}>
-              <Item onClick={handleGoogleAuth}>
-                <IconButton aria-label="delete" disabled color="primary">
-                  <Google />
-                </IconButton>
-                Singin with Google
-              </Item>
-            </Stack>
           </Box>
         </Box>
       </Container>
