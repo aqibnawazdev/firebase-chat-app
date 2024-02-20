@@ -12,7 +12,6 @@ function UserCard({ user }) {
     <Card
       elevation={0}
       sx={{
-        borderBottom: "1px solid #B4ABAB",
         width: "100%",
         display: "flex",
         alignItems: "center",
@@ -26,8 +25,8 @@ function UserCard({ user }) {
             src={user?.photoURL || "./images/user-billgate.png"}
           />
         }
-        title={user?.displayName || "test"}
-        subheader={user ? user?.status : "Last message"}
+        title={user?.displayName || "user"}
+        // subheader={user ? user?.status : "Last message"}
       />
       <Box
         sx={{
