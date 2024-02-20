@@ -62,12 +62,12 @@ function Messages() {
             variant="p"
             component="p"
             backgroundColor="#E7E7E7"
-            sx={{
+            sx={(theme) => ({
               padding: "10px",
-              borderRadius: "30px",
+              borderRadius: theme.shape.borderRadius,
               paddingLeft: "20px",
               paddingRight: "20px",
-            }}
+            })}
           >
             Messages 1
           </Typography>

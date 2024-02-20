@@ -6,6 +6,7 @@ import IconButton from "@mui/material/IconButton";
 import UserAvatar from "../avatar/UserAvatar";
 import { Home, MessageRounded } from "@mui/icons-material";
 function SideBar() {
+  const handleLogout = () => {};
   return (
     <SideBarContainer>
       <Grid item marginTop={2}>
@@ -28,7 +29,7 @@ function SideBar() {
         </Stack>
       </Grid>
       <Grid item marginBottom={2}>
-        <IconButton>
+        <IconButton onClick={handleLogout}>
           <img src="/images/logout.png" width={35} alt="" />
         </IconButton>
       </Grid>

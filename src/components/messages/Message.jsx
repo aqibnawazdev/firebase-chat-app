@@ -15,13 +15,13 @@ function Message({ userId, message }) {
         variant="p"
         component="p"
         backgroundColor="#6E00FF"
-        sx={{
+        sx={(theme) => ({
           padding: "10px",
-          borderRadius: "30px",
+          borderRadius: theme.shape.borderRadius,
           paddingLeft: "20px",
           paddingRight: "20px",
           color: "white",
-        }}
+        })}
       >
         Messages 1
       </Typography>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
 import MainContainer from "./components/containers/MainContainer";
@@ -15,9 +15,18 @@ import {
   RouterProvider,
   useNavigate,
 } from "react-router-dom";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
   const AppContainer = () => {
+    const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    console.log(user);
+    useEffect(() => {
+      if (Object.keys(user).length < 1) {
+        navigate("/login");
+      }
+    }, []);
     return (
       <MainContainer>
         <SideBar />
@@ -27,9 +36,6 @@ function App() {
     );
   };
   const Layout = () => {
-    // const auth = getAuth();
-    const navigate = useNavigate();
-
     return (
       <div className="app">
         <Outlet />

@@ -1,6 +1,6 @@
 import React from "react";
 import { colorObject } from "../../Theme/customColors";
-import { Grid } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 function SideBarContainer({ children }) {
   return (
     <Grid
@@ -11,9 +11,7 @@ function SideBarContainer({ children }) {
       xs={1}
       bgcolor={colorObject.sidebarBgPrimary}
       height={"95%"}
-      sx={(theme) => ({
-        borderRadius: "18px",
-      })}
+      sx={(theme) => ({ borderRadius: theme.shape.borderRadius })}
       alignItems={"center"}
       justifyContent={"space-between"}
     >

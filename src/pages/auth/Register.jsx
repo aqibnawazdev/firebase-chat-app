@@ -1,5 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,15 +14,24 @@ import Container from "@mui/material/Container";
 import Paper from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../../../firebase.config";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
 import "react-toastify/dist/ReactToastify.css";
 
 const defaultTheme = createTheme();
 
 export default function Register() {
   const [error, setError] = useState();
+  const [name, setName] = useState("");
+  const [file, setFile] = useState(null);
+  console.log(file);
   const navigate = useNavigate();
   const [errMessage, setErrorMessag] = useState(null);
 
@@ -45,20 +56,34 @@ export default function Register() {
       });
     }
   };
+  const updateProfile = (user) => {
+    const storage = getStorage();
+    const metadata = {
+      contentType: file.type,
+    };
+    const storageRef = ref(storage, "images/" + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+    uploadTask.on("state_changed", async (snapshot) =>
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        updateProfile(user, {
+          displayName: name,
+          photoURL: downloadURL,
+        });
+      })
+    );
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    // const auth = getAuth();
-
     try {
       await createUserWithEmailAndPassword(auth, email, password).then(
         (userCredential) => {
-          // Signed up
           const user = userCredential.user;
           if (user) {
             showToastMessage("Registered sucessfully...");
+            updateProfile(user);
             setTimeout(() => {
               navigate("/");
             }, 2000);
@@ -89,7 +114,7 @@ export default function Register() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Register
           </Typography>
           <ToastContainer />
           <Box
@@ -108,6 +133,7 @@ export default function Register() {
                   type="text"
                   id="name"
                   autoComplete="off"
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -140,6 +166,7 @@ export default function Register() {
                   type="file"
                   id="file"
                   autoComplete="off"
+                  onChange={(e) => setFile(e.target.files[0])}
                 />
               </Grid>
             </Grid>

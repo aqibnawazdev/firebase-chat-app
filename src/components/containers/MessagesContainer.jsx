@@ -6,13 +6,13 @@ function MessagesContainer({ children }) {
   return (
     <Paper
       margin={2}
-      sx={{
+      sx={(theme) => ({
         height: "95%",
-        borderRadius: "20px",
+        borderRadius: theme.shape.borderRadius + 2,
         width: "40%",
         margin: "16px",
         position: "relative",
-      }}
+      })}
     >
       <Grid
         item

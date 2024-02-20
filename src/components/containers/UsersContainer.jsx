@@ -1,6 +1,6 @@
 import React from "react";
 import { colorObject } from "../../Theme/customColors";
-import { Grid } from "@mui/material";
+import { Grid, Paper } from "@mui/material";
 function UsersContainer({ children }) {
   return (
     <Grid
@@ -12,9 +12,7 @@ function UsersContainer({ children }) {
       margin={2}
       bgcolor={colorObject.bodyBgPrimary}
       height={"95%"}
-      sx={(theme) => ({
-        borderRadius: "18px",
-      })}
+      sx={(theme) => ({ borderRadius: theme.shape.borderRadius })}
     >
       {children}
     </Grid>

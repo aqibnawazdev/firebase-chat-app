@@ -10,7 +10,7 @@ import { colorObject } from "../../Theme/customColors";
 function UserCard({ badge, status }) {
   return (
     <Card
-      elevation="false"
+      elevation={0}
       sx={{
         borderBottom: "1px solid #B4ABAB",
         width: "100%",

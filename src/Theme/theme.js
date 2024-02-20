@@ -22,7 +22,7 @@ const theme = createTheme({
   typography: typography(),
 
   shape: {
-    borderRadius: '0px'
+    borderRadius: 4
   },
   components: {
     MuiButton: {
