@@ -5,7 +5,7 @@ import Messages from "../../components/messages/Messages";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../../firebase.config";
 export const MainLayout = () => {
   const navigate = useNavigate();

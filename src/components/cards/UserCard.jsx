@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import { colorObject } from "../../Theme/customColors";
-function UserCard({ badge, status }) {
+function UserCard({ user }) {
   return (
     <Card
       elevation={0}
@@ -20,9 +20,14 @@ function UserCard({ badge, status }) {
       }}
     >
       <CardHeader
-        avatar={<Avatar aria-label="recipe" src="./images/user-billgate.png" />}
-        title="Bill Gate"
-        subheader={status ? status : "Last message"}
+        avatar={
+          <Avatar
+            aria-label="recipe"
+            src={user?.photoURL || "./images/user-billgate.png"}
+          />
+        }
+        title={user?.displayName || "test"}
+        subheader={user ? user?.status : "Last message"}
       />
       <Box
         sx={{
@@ -33,9 +38,9 @@ function UserCard({ badge, status }) {
           alignItems: "center",
         }}
       >
-        {status ? (
+        {user ? (
           ""
-        ) : badge ? (
+        ) : user?.badge ? (
           <>
             <Typography variant="subtitle2" component={"span"}>
               Today, 9:00pm

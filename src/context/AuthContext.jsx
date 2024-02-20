@@ -12,7 +12,7 @@ export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  console.log("From Global Context Provider: ", user);
+  // console.log("From Global Context Provider: ", user);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
