@@ -89,10 +89,10 @@ export default function Register() {
             });
 
             await addDoc(collectionRef, {
-              userId: user.uid,
-              displayName: user.displayName,
-              email: user.email,
-              photoURL: user.photoURL,
+              userId: userData.uid,
+              displayName: name,
+              email: email,
+              photoURL: user?.photoURL,
               timeStamp: serverTimestamp(),
             });
             setTimeout(() => {
