@@ -8,21 +8,21 @@ import React, {
   useState,
 } from "react";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
+  console.log("From Global Context Provider: ", user);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
         setUser(user);
-        console.log(user);
       } else {
       }
     });
     return () => unsub();
-  }, [user]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>

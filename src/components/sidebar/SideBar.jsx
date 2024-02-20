@@ -44,7 +44,7 @@ function SideBar() {
         </Stack>
       </Grid>
       <Grid item marginBottom={2}>
-        <IconButton onClick={handleLogout}>
+        <IconButton onClick={() => handleLogout()}>
           <img src="/images/logout.png" width={35} alt="" />
         </IconButton>
       </Grid>

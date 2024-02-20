@@ -1,11 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import { Button } from "@mui/material";
-import MainContainer from "./components/containers/MainContainer";
-import MessagesContainer from "./components/containers/MessagesContainer";
-import SideBar from "./components/sidebar/SideBar";
-import Users from "./components/users/Users";
-import Messages from "./components/messages/Messages";
+
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
@@ -15,26 +11,12 @@ import {
   RouterProvider,
   useNavigate,
 } from "react-router-dom";
-import { AuthContext } from "./context/AuthContext";
+import { AuthContext, AuthContextProvider } from "./context/AuthContext";
+import { auth } from "../firebase.config";
+import { getAuth } from "firebase/auth";
+import { MainLayout } from "./components/mainLayout/MainLayout";
 
 function App() {
-  const AppContainer = () => {
-    const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
-    console.log(user);
-    useEffect(() => {
-      if (!user.email) {
-        navigate("/login");
-      }
-    }, []);
-    return (
-      <MainContainer>
-        <SideBar />
-        <Users />
-        <Messages />
-      </MainContainer>
-    );
-  };
   const Layout = () => {
     return (
       <div className="app">
@@ -49,7 +31,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <AppContainer />,
+          element: <MainLayout />,
         },
         {
           path: "/login",
