@@ -7,12 +7,18 @@ import React, {
   useReducer,
   useState,
 } from "react";
+import { userReducer } from "./userReducer.js";
 
 export const AuthContext = createContext(null);
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
-  // console.log("From Global Context Provider: ", user);
+  const [state, dispatch] = useReducer(userReducer, {});
+
+  const handleUserSelect = (selectedUser) => {
+    // console.log("reduces", selectedUser);
+    dispatch({ type: "SELECT_USER", payload: selectedUser });
+  };
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -25,6 +31,10 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ user, handleUserSelect, selectedUser: state }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
