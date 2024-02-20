@@ -8,16 +8,10 @@ import React, {
   useState,
 } from "react";
 
-const user = {
-  Name: "",
-  photoURL: "",
-  userId: "",
-};
-
-export const AuthContext = createContext(user);
+export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -27,8 +21,7 @@ export const AuthContextProvider = ({ children }) => {
       } else {
       }
     });
-    () => unsub();
-    yfrsaqQ;
+    return () => unsub();
   }, [user]);
 
   return (
