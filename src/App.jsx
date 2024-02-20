@@ -23,7 +23,7 @@ function App() {
     const { user } = useContext(AuthContext);
     console.log(user);
     useEffect(() => {
-      if (Object.keys(user).length < 1) {
+      if (!user.email) {
         navigate("/login");
       }
     }, []);
