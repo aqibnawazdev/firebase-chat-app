@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "../../../firebase.config";
+import { auth, db } from "../../../firebase.config";
 import {
   getStorage,
   ref,
@@ -24,16 +24,20 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  addDoc,
+  collection,
+  serverTimestamp,
+  Timestamp,
+} from "firebase/firestore";
+import { AuthContext } from "../../context/AuthContext";
 
 const defaultTheme = createTheme();
 
 export default function Register() {
-  const [error, setError] = useState();
-  const [name, setName] = useState("");
-  const [file, setFile] = useState(null);
-  console.log(file);
   const navigate = useNavigate();
-  const [errMessage, setErrorMessag] = useState(null);
+  const storage = getStorage();
+  const collectionRef = collection(db, "users");
 
   const showToastMessage = (message) => {
     if (message === "Registered sucessfully...") {
@@ -56,34 +60,41 @@ export default function Register() {
       });
     }
   };
-  const updateProfile = (user) => {
-    const storage = getStorage();
-    const metadata = {
-      contentType: file.type,
-    };
-    const storageRef = ref(storage, "images/" + file.name);
-    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-    uploadTask.on("state_changed", async (snapshot) =>
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        updateProfile(user, {
-          displayName: name,
-          photoURL: downloadURL,
-        });
-      })
-    );
-  };
+  const { user } = React.useContext(AuthContext);
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
+    const name = data.get("name");
+    const file = data.get("profile-pic");
+
     try {
       await createUserWithEmailAndPassword(auth, email, password).then(
-        (userCredential) => {
-          const user = userCredential.user;
-          if (user) {
-            showToastMessage("Registered sucessfully...");
-            updateProfile(user);
+        async (userCredential) => {
+          const userData = userCredential.user;
+          if (userData) {
+            const metadata = {
+              contentType: file.type,
+            };
+            const storageRef = ref(storage, "images/" + name);
+            await uploadBytesResumable(storageRef, file, metadata).then(() => {
+              getDownloadURL(storageRef).then(async (downloadURL) => {
+                await updateProfile(userData, {
+                  displayName: name,
+                  photoURL: downloadURL,
+                });
+                showToastMessage("Registered sucessfully...");
+              });
+            });
+
+            await addDoc(collectionRef, {
+              userId: user.uid,
+              displayName: user.displayName,
+              email: user.email,
+              photoURL: user.photoURL,
+              timeStamp: serverTimestamp(),
+            });
             setTimeout(() => {
               navigate("/");
             }, 2000);
@@ -133,7 +144,6 @@ export default function Register() {
                   type="text"
                   id="name"
                   autoComplete="off"
-                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -166,7 +176,6 @@ export default function Register() {
                   type="file"
                   id="file"
                   autoComplete="off"
-                  onChange={(e) => setFile(e.target.files[0])}
                 />
               </Grid>
             </Grid>
