@@ -14,17 +14,18 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import IconButton from "@mui/material/IconButton";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-} from "firebase/auth";
+
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const defaultTheme = createTheme();
 import { Google } from "@mui/icons-material";
+import { auth } from "../../../firebase.config";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 export default function Login() {
   const showToastMessage = (message) => {
     if (message === "Logged in Successfully...") {
@@ -47,12 +48,27 @@ export default function Login() {
       });
     }
   };
-
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        if (user) {
+          showToastMessage("Logged in Successfully...");
+          navigate("/");
+        }
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+      });
   };
 
   const handleGoogleAuth = () => {
