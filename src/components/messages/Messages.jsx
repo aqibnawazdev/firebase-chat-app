@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -26,6 +26,7 @@ function Messages() {
   const [allChat, setAllChat] = useState(null);
   const { selectedUser, chat } = useContext(AuthContext);
   const [currUserId, setCurrUserId] = useState(null);
+  const ref = useRef(null);
   console.log("chat", chat);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -37,6 +38,15 @@ function Messages() {
     });
     return () => unsub();
   }, [chat]);
+
+  useEffect(() => {
+    if (chat?.messages.length) {
+      ref.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [chat?.messages?.length]);
 
   const handleMessageSent = async (e) => {
     e.preventDefault();
@@ -104,6 +114,7 @@ function Messages() {
         {chat?.messages?.map((m) => (
           <Message key={m.body} currUserId={currUserId} message={m} />
         ))}
+        <div ref={ref} />
       </Box>
 
       <Box

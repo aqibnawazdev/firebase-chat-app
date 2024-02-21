@@ -21,7 +21,12 @@ function MessagesContainer({ children }) {
         container
         direction={"column"}
         bgcolor={colorObject.bgWhite}
-        sx={{ width: "100%", marginLeft: "0px", padding: "0px" }}
+        sx={{
+          width: "100%",
+          borderRadius: 18,
+          marginLeft: "0px",
+          padding: "0px",
+        }}
       >
         {children}
       </Grid>
