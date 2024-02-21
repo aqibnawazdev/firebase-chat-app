@@ -14,13 +14,13 @@ function Message({ currUserId, message }) {
       <Typography
         variant="p"
         component="p"
-        backgroundColor="#6E00FF"
+        backgroundColor={message.sender == currUserId ? "#6E00FF" : "#E7E7E7"}
         sx={(theme) => ({
           padding: "10px",
           borderRadius: theme.shape.borderRadius,
           paddingLeft: "20px",
           paddingRight: "20px",
-          color: "white",
+          color: message.sender == currUserId ? "white" : "#000",
         })}
       >
         {message.body}

@@ -11,7 +11,13 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import SendIcon from "@mui/icons-material/Send";
 import Message from "./Message";
 import { AuthContext } from "../../context/AuthContext";
-import { arrayUnion, doc, onSnapshot, updateDoc } from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 import { auth, db } from "../../../firebase.config";
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -20,7 +26,7 @@ function Messages() {
   const [allChat, setAllChat] = useState(null);
   const { selectedUser, chat } = useContext(AuthContext);
   const [currUserId, setCurrUserId] = useState(null);
-
+  console.log("chat", chat);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -35,7 +41,7 @@ function Messages() {
   const handleMessageSent = async (e) => {
     e.preventDefault();
     try {
-      const docRef = doc(db, "chats", selectedUser?.userId);
+      const docRef = doc(db, "chats", chat.docId);
       await updateDoc(docRef, {
         messages: arrayUnion({
           sender: currUserId,
@@ -88,7 +94,7 @@ function Messages() {
           flexDirection: "column",
         }}
       >
-        {chat?.messages.map((m) => (
+        {chat?.messages?.map((m) => (
           <Message key={m.body} currUserId={currUserId} message={m} />
         ))}
       </Box>
