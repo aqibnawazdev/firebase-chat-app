@@ -10,8 +10,12 @@ function SideBarContainer({ children }) {
       direction={"column"}
       xs={1}
       bgcolor={colorObject.sidebarBgPrimary}
-      height={"95%"}
-      sx={(theme) => ({ borderRadius: theme.shape.borderRadius })}
+      height={"97%"}
+      sx={(theme) => ({
+        borderRadius: theme.shape.borderRadius,
+        marginLeft: "0px",
+        marginRight: "0px",
+      })}
       alignItems={"center"}
       justifyContent={"space-between"}
     >

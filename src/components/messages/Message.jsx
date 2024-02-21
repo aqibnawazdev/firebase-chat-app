@@ -8,7 +8,7 @@ function Message({ currUserId, message }) {
       sx={{
         width: "fit-content",
         alignSelf: message.sender == currUserId ? "end" : "start",
-        margin: 2,
+        margin: 1,
       }}
     >
       <Typography
@@ -16,7 +16,7 @@ function Message({ currUserId, message }) {
         component="p"
         backgroundColor={message.sender == currUserId ? "#6E00FF" : "#E7E7E7"}
         sx={(theme) => ({
-          padding: "10px",
+          padding: "8px",
           borderRadius: theme.shape.borderRadius,
           paddingLeft: "20px",
           paddingRight: "20px",
@@ -27,7 +27,7 @@ function Message({ currUserId, message }) {
       </Typography>
       <Typography
         variant="caption"
-        sx={{ marginLeft: "10px", marginTop: "5px" }}
+        sx={{ marginLeft: "10px", marginTop: "0px" }}
       >
         {moment(message?.sendAt.toDate()).calendar()}
       </Typography>

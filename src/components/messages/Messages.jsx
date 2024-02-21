@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import MessagesContainer from "../containers/MessagesContainer";
-
+import "../../index.css";
 import IconButton from "@mui/material/IconButton";
 import UserAvatar from "../avatar/UserAvatar";
 import InputBase from "@mui/material/InputBase";
@@ -62,7 +62,12 @@ function Messages() {
       <Stack
         direction={"row"}
         spacing="15px"
-        sx={{ width: "100%", padding: "10px" }}
+        sx={{
+          width: "100%",
+          padding: "10px",
+          height: "70px",
+          // backgroundColor: "#f3f3f3",
+        }}
       >
         <UserAvatar srcPath={selectedUser?.photoURL} />
         <Box
@@ -92,6 +97,8 @@ function Messages() {
         sx={{
           display: "flex",
           flexDirection: "column",
+          height: "800px",
+          overflow: "auto",
         }}
       >
         {chat?.messages?.map((m) => (
@@ -121,9 +128,6 @@ function Messages() {
           <SendIcon />
         </IconButton>
       </Box>
-      <Box backgroundColor="#6E00FF" sx={micIconStyles}>
-        <img src="./images/bi_mic-fill.png" alt="" width={20} />
-      </Box>
     </MessagesContainer>
   );
 }
@@ -131,20 +135,15 @@ function Messages() {
 export default Messages;
 
 var formStyles = {
-  width: "80%",
+  width: "40%",
   backgroundColor: "#EFF6FC",
-  position: "absolute",
-  bottom: 10,
-  left: "20px",
+  position: "fixed",
+  bottom: "20px",
   borderRadius: "17px",
   padding: "0px",
   paddingRight: "10px",
   display: "flex",
-};
-var micIconStyles = {
-  position: "absolute",
-  bottom: 10,
-  right: "80px",
-  padding: "7px",
-  borderRadius: "10px",
+  marginBottom: "10px",
+  marginLeft: "20px",
+  height: "40px",
 };

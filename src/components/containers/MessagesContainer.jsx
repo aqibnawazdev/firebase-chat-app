@@ -7,20 +7,21 @@ function MessagesContainer({ children }) {
     <Paper
       margin={2}
       sx={(theme) => ({
-        height: "95%",
+        height: "97%",
         borderRadius: theme.shape.borderRadius + 2,
-        width: "40%",
-        margin: "16px",
+        width: "50%",
+        margin: "12px 0px",
+        paddingLeft: "0px",
         position: "relative",
+        overflow: "hidden",
       })}
     >
       <Grid
         item
         container
         direction={"column"}
-        margin={1}
         bgcolor={colorObject.bgWhite}
-        sx={{ maxWidth: "95%" }}
+        sx={{ width: "100%", marginLeft: "0px", padding: "0px" }}
       >
         {children}
       </Grid>

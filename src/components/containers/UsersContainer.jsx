@@ -8,11 +8,15 @@ function UsersContainer({ children }) {
       container
       direction={"column"}
       alignContent={"center"}
-      xs={4}
+      xs={2}
       margin={2}
       bgcolor={colorObject.bodyBgPrimary}
-      height={"95%"}
-      sx={(theme) => ({ borderRadius: theme.shape.borderRadius })}
+      height={"97%"}
+      sx={(theme) => ({
+        borderRadius: theme.shape.borderRadius,
+        marginLeft: "0px",
+        marginRight: "0px",
+      })}
     >
       {children}
     </Grid>

@@ -1,3 +1,20 @@
 .status {
   font-size: 2px;
 }
+html {
+  overflow: hidden;
+}
+* {
+  scroll-behavior: smooth;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  border-radius: 20px;
+  background-color: rgb(216, 216, 216);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #6e00ff;
+  size: 10px;
+  border-radius: 20px;
+  scroll-margin-block-end: 10px;
+}
