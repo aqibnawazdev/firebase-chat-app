@@ -13,7 +13,9 @@ import {
   doc,
   getDoc,
   onSnapshot,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 
 import { userReducer } from "./userReducer.js";
@@ -23,24 +25,31 @@ export const AuthContext = createContext(null);
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const [state, dispatch] = useReducer(userReducer, {});
-
+  const [docId, setDocId] = useState(null);
   //User Selection....
   const handleUserSelect = async (selectedUser) => {
     const { userId } = selectedUser;
-    const docRef = doc(db, "chats", userId);
-
+    const docRef = collection(db, "chats");
+    const q = query(docRef, where("users", "array-contains", user.uid));
     dispatch({ type: "SELECT_USER", payload: selectedUser });
-    const unsub = onSnapshot(doc(db, "chats", userId), async (snap) => {
-      const data = snap.data();
-      if (!data) {
-        await setDoc(docRef, {
+    const unsub = onSnapshot(q, async (snap) => {
+      console.log(snap.empty);
+      if (snap.empty) {
+        await addDoc(docRef, {
           users: [userId, user.uid],
           createdAt: new Date(),
           messages: [],
         });
       } else {
-        dispatch({ type: "CHAT", payload: data });
+        const data = snap.docs.map((doc) => ({
+          ...doc.data(),
+          docId: doc.id,
+        }));
+        dispatch({ type: "CHAT", payload: data[0] });
       }
+
+      // if (!data)
+      // }
     });
   };
 
