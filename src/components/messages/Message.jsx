@@ -1,13 +1,13 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-
-function Message({ userId, message }) {
+import moment from "moment";
+function Message({ currUserId, message }) {
   return (
     <Stack
       sx={{
         width: "fit-content",
-        alignSelf: "end",
+        alignSelf: message.sender == currUserId ? "end" : "start",
         margin: 2,
       }}
     >
@@ -23,13 +23,13 @@ function Message({ userId, message }) {
           color: "white",
         })}
       >
-        Messages 1
+        {message.body}
       </Typography>
       <Typography
         variant="caption"
         sx={{ marginLeft: "10px", marginTop: "5px" }}
       >
-        Tody, 12:00 pm
+        {moment(message?.sendAt.toDate()).calendar()}
       </Typography>
     </Stack>
   );
