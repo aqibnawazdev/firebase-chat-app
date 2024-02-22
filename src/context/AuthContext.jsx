@@ -30,10 +30,11 @@ export const AuthContextProvider = ({ children }) => {
   const handleUserSelect = async (selectedUser) => {
     const { userId } = selectedUser;
     const docRef = collection(db, "chats");
+
     const q = query(docRef, where("users", "array-contains", user.uid));
     dispatch({ type: "SELECT_USER", payload: selectedUser });
+
     const unsub = onSnapshot(q, async (snap) => {
-      console.log(snap.empty);
       if (snap.empty) {
         await addDoc(docRef, {
           users: [userId, user.uid],
@@ -47,9 +48,6 @@ export const AuthContextProvider = ({ children }) => {
         }));
         dispatch({ type: "CHAT", payload: data[0] });
       }
-
-      // if (!data)
-      // }
     });
   };
 

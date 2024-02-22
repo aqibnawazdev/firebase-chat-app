@@ -12,7 +12,7 @@ function SideBarContainer({ children }) {
       bgcolor={colorObject.sidebarBgPrimary}
       height={"97%"}
       sx={(theme) => ({
-        borderRadius: theme.shape.borderRadius,
+        borderRadius: theme.shape.borderRadius + 2,
         marginLeft: "0px",
         marginRight: "0px",
       })}
