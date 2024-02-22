@@ -70,37 +70,34 @@ export default function Register() {
     const file = data.get("profile-pic");
 
     try {
-      await createUserWithEmailAndPassword(auth, email, password).then(
-        async (userCredential) => {
-          const userData = userCredential.user;
-          if (userData) {
-            const metadata = {
-              contentType: file.type,
-            };
-            const storageRef = ref(storage, "images/" + name);
-            await uploadBytesResumable(storageRef, file, metadata).then(() => {
-              getDownloadURL(storageRef).then(async (downloadURL) => {
-                await updateProfile(userData, {
-                  displayName: name,
-                  photoURL: downloadURL,
-                });
-                showToastMessage("Registered sucessfully...");
-              });
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      const userData = res.user;
+      if (userData) {
+        const metadata = {
+          contentType: file.type,
+        };
+        const storageRef = ref(storage, "images/" + name);
+        await uploadBytesResumable(storageRef, file, metadata).then(() => {
+          getDownloadURL(storageRef).then(async (downloadURL) => {
+            await updateProfile(userData, {
+              displayName: name,
+              photoURL: downloadURL,
             });
-
             await addDoc(collectionRef, {
               userId: userData.uid,
               displayName: name,
               email: email,
-              photoURL: user?.photoURL,
+              photoURL: userData?.photoURL,
               timeStamp: serverTimestamp(),
             });
-            setTimeout(() => {
-              navigate("/");
-            }, 2000);
-          }
-        }
-      );
+            showToastMessage("Registered sucessfully...");
+          });
+        });
+
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+      }
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
