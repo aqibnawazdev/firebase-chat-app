@@ -152,7 +152,7 @@ function Messages() {
         }}
       >
         {chat &&
-          chat?.map((m, i) => (
+          chat?.messages.map((m, i) => (
             <Message key={m.sendAt} currUserId={currUserId} message={m} />
           ))}
         <div ref={ref} />

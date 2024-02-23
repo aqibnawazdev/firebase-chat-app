@@ -20,6 +20,7 @@ import {
   getDocs,
   onSnapshot,
   doc,
+  getDoc,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "../../context/AuthContext";
@@ -30,30 +31,38 @@ function Users() {
   const [err, setErr] = useState(null);
   const [conversation, setConversations] = useState(null);
   const { user, handleUserSelect, chat, dispatch } = useContext(AuthContext);
-
+  const [currentUserId, setCurrentUserId] = useState(null);
   const userRef = collection(db, "users");
   const searchQuery = query(userRef, where("displayName", "==", searchUser));
 
   //Handle Search
-
+  const populate = [];
   const fetchConversations = (currUserId) => {
     const docRef = collection(db, "chats");
     const q = query(docRef, where("users", "array-contains", currUserId));
-    const unsub = onSnapshot(q, async (snap) => {
+    const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
         const data = snap.docs.map((doc) => ({
           ...doc.data(),
           docId: doc.id,
         }));
-        setConversations(data);
+
+        data.forEach(async (d) =>
+          populate.push({ ...d, users: await getUsersDetail(d.users) })
+        );
+
+        // console.log("data: ", data);
+        setConversations(populate);
       }
     });
   };
-  console.log("Conversation data ", conversation);
+  console.log(conversation);
+
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
         const uid = user.uid;
+        setCurrentUserId(uid);
         fetchConversations(uid);
       } else {
       }
@@ -76,10 +85,11 @@ function Users() {
   };
 
   const handlesSearchSelect = (selectedUser) => {
+    console.log("seledted user", selectedUser);
     handleUserSelect(selectedUser);
   };
 
-  const handleChatUserSelect = async (selectedUser) => {
+  const handleChatUserSelect = async (selectedUser, docId) => {
     const selectedUserId = selectedUser;
     console.log("selected User", selectedUserId);
 
@@ -90,8 +100,22 @@ function Users() {
       console.log("User Not found..");
     }
     snapshot.docs.forEach((doc) => {
-      handleUserSelect(doc.data());
+      handleUserSelect(doc.data(), docId);
     });
+  };
+
+  const getUsersDetail = async (id) => {
+    console.log("id", id);
+
+    if (currentUserId !== id[0]) {
+      const docRef = doc(db, "users", id[0]);
+      const userDetails = await getDoc(docRef);
+      return userDetails.data();
+    } else {
+      const docRef = doc(db, "users", id[1]);
+      const userDetails = await getDoc(docRef);
+      return userDetails.data();
+    }
   };
 
   return (
@@ -123,7 +147,12 @@ function Users() {
         </Paper>
       </Grid>
       {search && (
-        <Grid item onClick={() => handlesSearchSelect(availableUser)}>
+        <Grid
+          item
+          onClick={() => {
+            handlesSearchSelect(availableUser), setSearch(false);
+          }}
+        >
           <Paper
             sx={{
               p: "2px 4px",
@@ -165,25 +194,27 @@ function Users() {
           <Typography variant="h3" component={"h2"} fontWeight={600}>
             People
           </Typography>
-          {conversation?.map((c, i) => (
-            <Box
-              component={"div"}
-              sx={{ width: "100%", cursor: "pointer" }}
-              key={c.docId}
-              onClick={(e) => handleChatUserSelect(c.users[0])}
-            >
-              <UserCard
-                photoURL={c.messages[0].receiverImg}
-                userName={c.messages[0].receiverName}
-                id={c.users[0]}
-                message={c.messages[c.messages?.length - 1].body}
-              />
-              <Divider
-                component="li"
-                sx={{ width: "100%", listStyle: "none" }}
-              />
-            </Box>
-          ))}
+          {conversation &&
+            conversation.map((c) => (
+              <Box
+                component={"div"}
+                sx={{ width: "100%", cursor: "pointer" }}
+                key={c.docId}
+                onClick={(e) => handleChatUserSelect(c.users.userId, c.docId)}
+              >
+                <UserCard
+                  photoURL={c.users.photoURL}
+                  userName={c.users.displayName}
+                  user={c.users}
+                  chatid={c.docId}
+                  message={c.messages[c.messages?.length - 1].body}
+                />
+                <Divider
+                  component="li"
+                  sx={{ width: "100%", listStyle: "none" }}
+                />
+              </Box>
+            ))}
         </Paper>
       </Grid>
     </UsersContainer>

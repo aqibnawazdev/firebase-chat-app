@@ -27,7 +27,9 @@ import "react-toastify/dist/ReactToastify.css";
 import {
   addDoc,
   collection,
+  doc,
   serverTimestamp,
+  setDoc,
   Timestamp,
 } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
@@ -37,7 +39,6 @@ const defaultTheme = createTheme();
 export default function Register() {
   const navigate = useNavigate();
   const storage = getStorage();
-  const collectionRef = collection(db, "users");
 
   const showToastMessage = (message) => {
     if (message === "Registered sucessfully...") {
@@ -83,7 +84,8 @@ export default function Register() {
               displayName: name,
               photoURL: downloadURL,
             });
-            await addDoc(collectionRef, {
+            const docRef = doc(db, "users", userData.uid);
+            await setDoc(docRef, {
               userId: userData.uid,
               displayName: name,
               email: email,

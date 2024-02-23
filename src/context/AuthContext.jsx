@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../firebase.config.js";
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 
 import { userReducer } from "./userReducer.js";
 
@@ -13,26 +13,26 @@ export const AuthContextProvider = ({ children }) => {
   const [chat, setChat] = useState(null);
   //User Selection....
 
-  const handleUserSelect = async (selectedUser) => {
+  const handleUserSelect = async (selectedUser, docId) => {
     dispatch({ type: "SELECT_USER", payload: selectedUser });
-    console.log(selectedUser.userId);
+    console.log("selectedUserId ", selectedUser.userId);
+    // console.log("docId ", docId);
     const { userId } = selectedUser;
-    const docRef = collection(db, "chats");
-    const q = query(
-      docRef,
-      where("users", "array-contains", selectedUser.userId)
-    );
-    const unsub = onSnapshot(q, async (snap) => {
+    const docRef = doc(db, "chats", docId);
+    // const q = query(
+    //   docRef,
+    //   where("users", "array-contains", selectedUser.userId)
+    // );
+    // const docQuery = query(docRef, where("docId", "==", docId));
+    const unsub = onSnapshot(docRef, async (snap) => {
+      console.log(snap.data());
       if (!snap.empty) {
-        const data = snap.docs.map((doc) => ({
-          ...doc.data(),
-          docId: doc.id,
-        }));
-        const [messages] = data
-          ?.filter((c, i) => c.users[1] === user.uid)
-          .map((m) => m.messages);
-
-        setChat(messages);
+        const data = snap.data();
+        // const [messages] = data
+        //   ?.filter((c, i) => c.users[1] === user.uid)
+        //   .map((m) => m.messages);
+        // console.log("chat Data ", data);
+        setChat(data);
       }
     });
   };
