@@ -42,14 +42,17 @@ function Users() {
     const q = query(docRef, where("users", "array-contains", currUserId));
     const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
-        const data = snap.docs.map((doc) => ({
-          ...doc.data(),
-          docId: doc.id,
-        }));
-
-        data.forEach(async (d) =>
-          populate.push({ ...d, users: await getUsersDetail(d.users) })
-        );
+        const data = snap.docs
+          .map((doc) => ({
+            ...doc.data(),
+            docId: doc.id,
+          }))
+          .forEach(async (d) =>
+            populate.push({
+              ...d,
+              users: await getUsersDetail(d.users),
+            })
+          );
 
         // console.log("data: ", data);
         setConversations(populate);
