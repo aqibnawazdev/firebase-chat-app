@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import UsersContainer from "../containers/UsersContainer";
 import { Grid, Typography, Stack, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
@@ -19,50 +19,53 @@ import {
   where,
   getDocs,
   onSnapshot,
+  doc,
 } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "../../context/AuthContext";
 function Users() {
   const [searchUser, setSearchUser] = useState("");
   const [availableUser, setAvailableUser] = useState(null);
   const [search, setSearch] = useState(false);
   const [err, setErr] = useState(null);
-  const [allUsers, setAllUsers] = useState(null);
-  // console.log("allUsers", allUsers);
+  const [conversation, setConversations] = useState(null);
+  const { user, handleUserSelect, chat, dispatch } = useContext(AuthContext);
 
-  const { user, handleUserSelect } = useContext(AuthContext);
-  //User Reference
   const userRef = collection(db, "users");
-  const displayName = user.displayName;
   const searchQuery = query(userRef, where("displayName", "==", searchUser));
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { currentUser } = await getAuth();
-      const displayName = await currentUser.displayName;
-      const getAllUserQuery = await query(
-        userRef,
-        where("displayName", "!=", displayName)
-      );
-      const unsubscribe = onSnapshot(getAllUserQuery, (querySnapshot) => {
-        const users = [];
-        querySnapshot.forEach((doc) => {
-          users.push(doc.data());
-        });
-        setAllUsers(users);
-      });
-    };
-    getUser();
-
-    return () => {};
-  }, [displayName]);
-
   //Handle Search
+
+  const fetchConversations = (currUserId) => {
+    const docRef = collection(db, "chats");
+    const q = query(docRef, where("users", "array-contains", currUserId));
+    const unsub = onSnapshot(q, async (snap) => {
+      if (!snap.empty) {
+        const data = snap.docs.map((doc) => ({
+          ...doc.data(),
+          docId: doc.id,
+        }));
+        setConversations(data);
+      }
+    });
+  };
+  console.log("Conversation data ", conversation);
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const uid = user.uid;
+        fetchConversations(uid);
+      } else {
+      }
+    });
+    return () => unsub();
+  }, []);
+
   const handleSearch = async (e) => {
     e.preventDefault();
+    setSearch(true);
 
     const snapshot = await getDocs(searchQuery);
-    setSearch(true);
     if (snapshot.docs.length === 0) {
       setErr("User Not found..");
     }
@@ -71,6 +74,26 @@ function Users() {
     });
     setSearchUser("");
   };
+
+  const handlesSearchSelect = (selectedUser) => {
+    handleUserSelect(selectedUser);
+  };
+
+  const handleChatUserSelect = async (selectedUser) => {
+    const selectedUserId = selectedUser;
+    console.log("selected User", selectedUserId);
+
+    const userRef = collection(db, "users");
+    const searchQuery = query(userRef, where("userId", "==", selectedUserId));
+    const snapshot = await getDocs(searchQuery);
+    if (snapshot.docs.length === 0) {
+      console.log("User Not found..");
+    }
+    snapshot.docs.forEach((doc) => {
+      handleUserSelect(doc.data());
+    });
+  };
+
   return (
     <UsersContainer>
       <Grid item>
@@ -100,7 +123,7 @@ function Users() {
         </Paper>
       </Grid>
       {search && (
-        <Grid item>
+        <Grid item onClick={() => handlesSearchSelect(availableUser)}>
           <Paper
             sx={{
               p: "2px 4px",
@@ -111,10 +134,14 @@ function Users() {
               flexDirection: "column",
               padding: 2,
               marginBottom: "10px",
+              cursor: "pointer",
             }}
           >
             {availableUser ? (
-              <UserCard user={availableUser} />
+              <UserCard
+                photoURL={availableUser?.photoURL}
+                userName={availableUser?.displayName}
+              />
             ) : (
               <Typography variant="h1" color="initial">
                 {err}
@@ -138,14 +165,19 @@ function Users() {
           <Typography variant="h3" component={"h2"} fontWeight={600}>
             People
           </Typography>
-          {allUsers?.map((user) => (
+          {conversation?.map((c, i) => (
             <Box
               component={"div"}
               sx={{ width: "100%", cursor: "pointer" }}
-              key={user.userId}
-              onClick={() => handleUserSelect(user)}
+              key={c.docId}
+              onClick={(e) => handleChatUserSelect(c.users[0])}
             >
-              <UserCard user={user} />
+              <UserCard
+                photoURL={c.messages[0].receiverImg}
+                userName={c.messages[0].receiverName}
+                id={c.users[0]}
+                message={c.messages[c.messages?.length - 1].body}
+              />
               <Divider
                 component="li"
                 sx={{ width: "100%", listStyle: "none" }}
@@ -159,3 +191,24 @@ function Users() {
 }
 
 export default Users;
+
+// useEffect(() => {
+// const getUser = async () => {
+//   const { currentUser } = await getAuth();
+//   const displayName = await currentUser.displayName;
+//   const getAllUserQuery = await query(
+//     userRef,
+//     where("displayName", "!=", displayName)
+//   );
+//   const unsubscribe = onSnapshot(getAllUserQuery, (querySnapshot) => {
+//     const users = [];
+//     querySnapshot.forEach((doc) => {
+//       users.push(doc.data());
+//     });
+//     setAllUsers(users);
+//   });
+// };
+// getUser();
+
+//   return () => {};
+// }, []);

@@ -29,7 +29,7 @@ function Message({ currUserId, message }) {
         variant="caption"
         sx={{ marginLeft: "10px", marginTop: "0px" }}
       >
-        {moment(message?.sendAt.toDate()).calendar()}
+        {/* {moment(message?.sendAt.toDate()).calendar()} */}
       </Typography>
     </Stack>
   );
