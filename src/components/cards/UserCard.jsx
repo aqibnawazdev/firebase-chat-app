@@ -1,13 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
-import { colorObject } from "../../Theme/customColors";
-function UserCard({ user }) {
+function UserCard({ user, id, message, userName, photoURL }) {
   return (
     <Card
       elevation={0}
@@ -22,11 +18,12 @@ function UserCard({ user }) {
         avatar={
           <Avatar
             aria-label="recipe"
-            src={user?.photoURL || "./images/user-billgate.png"}
+            src={photoURL || "./images/user-billgate.png"}
           />
         }
-        title={user?.displayName || "user"}
-        // subheader={user ? user?.status : "Last message"}
+        // title={id || "user"}
+        title={userName || "user"}
+        subheader={message}
       />
       <Box
         sx={{
@@ -37,7 +34,7 @@ function UserCard({ user }) {
           alignItems: "center",
         }}
       >
-        {user ? (
+        {/* {user ? (
           ""
         ) : user?.badge ? (
           <>
@@ -51,7 +48,7 @@ function UserCard({ user }) {
             src="./images/tick-double.png"
             sx={{ width: 18, height: 18 }}
           />
-        )}
+        )} */}
       </Box>
     </Card>
   );
