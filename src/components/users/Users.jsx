@@ -52,20 +52,15 @@ function Users() {
   };
   const fetchConversations = (currUserId) => {
     const docRef = collection(db, "chats");
-    const chatd = [];
     const q = query(docRef, where("users", "array-contains", currUserId));
     const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
-        const data = snap.docs
-          .map((doc) => ({
-            ...doc.data(),
-            docId: doc.id,
-          }))
-          .forEach(async (d) =>
-            chatd.push({ ...d, users: await getUsersDetail(d.users) })
-          );
+        const data = snap.docs.map((doc) => ({
+          ...doc.data(),
+          docId: doc.id,
+        }));
+        setConversations(data);
       }
-      setConversations(chatd);
     });
   };
   console.log("Conversations ", conversation);
@@ -197,13 +192,23 @@ function Users() {
               component={"div"}
               sx={{ width: "100%", cursor: "pointer" }}
               key={c.docId}
-              onClick={(e) =>
-                handleChatUserSelect(c.users.userId, c.conversationId)
-              }
+              onClick={(e) => {
+                let selectedUserId =
+                  c.users[0] === currentUserId ? c.users[1] : c.users[0];
+                handleChatUserSelect(selectedUserId, c.conversationId);
+              }}
             >
               <UserCard
-                photoURL={c.users.photoURL}
-                userName={c.users.displayName}
+                photoURL={
+                  c.users[0] === currentUserId
+                    ? c.usersDetails[0].photoURL
+                    : c.usersDetails[1].photoURL
+                }
+                userName={
+                  c.users[0] === currentUserId
+                    ? c.usersDetails[0].displayName
+                    : c.usersDetails[1].displayName
+                }
                 user={c.users}
                 chatid={c.docId}
                 message={c.messages[c.messages?.length - 1].body}

@@ -43,14 +43,14 @@ function Messages() {
     return () => unsub();
   }, [chat]);
 
-  // useEffect(() => {
-  //   if (chat?.messages.length) {
-  //     ref.current?.scrollIntoView({
-  //       behavior: "smooth",
-  //       block: "end",
-  //     });
-  //   }
-  // }, [chat?.messages?.length]);
+  useEffect(() => {
+    if (chat?.messages.length) {
+      ref.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
+    }
+  }, [chat?.messages?.length]);
 
   const handleMessageSent = async (e) => {
     e.preventDefault();
@@ -80,6 +80,16 @@ function Messages() {
                 ? currentUser.uid + selectedUser.userId
                 : selectedUser.userId + currentUser.uid,
             createdAt: new Date(),
+            usersDetails: [
+              {
+                photoURL: selectedUser.photoURL,
+                displayName: selectedUser.displayName,
+              },
+              {
+                photoURL: currentUser.photoURL,
+                displayName: currentUser.displayName,
+              },
+            ],
             messages: [
               {
                 sender: currentUser.uid,
