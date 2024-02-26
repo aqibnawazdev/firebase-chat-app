@@ -3,7 +3,20 @@ import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-function UserCard({ user, id, message, userName, photoURL, chatid }) {
+import Typography from "@mui/material/Typography";
+import Badge from "@mui/material/Badge";
+import moment from "moment";
+function UserCard({
+  user,
+  id,
+  message,
+  userName,
+  photoURL,
+  chatid,
+  seen,
+  updatedAt,
+  messagesLength,
+}) {
   return (
     <Card
       elevation={0}
@@ -33,21 +46,23 @@ function UserCard({ user, id, message, userName, photoURL, chatid }) {
           alignItems: "center",
         }}
       >
-        {/* {user ? (
-          ""
-        ) : user?.badge ? (
-          <>
-            <Typography variant="subtitle2" component={"span"}>
-              Today, 9:00pm
-            </Typography>
-            <Badge badgeContent={2} color="secondary" sx={{ marginTop: 2 }} />
-          </>
-        ) : (
+        {seen ? (
           <Avatar
             src="./images/tick-double.png"
             sx={{ width: 18, height: 18 }}
           />
-        )} */}
+        ) : (
+          <>
+            <Typography variant="subtitle2" component={"span"}>
+              {moment(updatedAt.toDate()).calendar()}
+            </Typography>
+            <Badge
+              badgeContent={messagesLength}
+              color="secondary"
+              sx={{ marginTop: 2 }}
+            />
+          </>
+        )}
       </Box>
     </Card>
   );

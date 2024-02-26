@@ -16,6 +16,7 @@ export const AuthContextProvider = ({ children }) => {
   const handleUserSelect = async (selectedUser, chatId) => {
     dispatch({ type: "SELECT_USER", payload: selectedUser });
     console.log("selectedUserId ", selectedUser.userId);
+    setChat(null);
     // console.log("docId ", docId);
     if (!chatId) {
       const conversationId =
