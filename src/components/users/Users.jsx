@@ -21,6 +21,7 @@ import {
   onSnapshot,
   doc,
   getDoc,
+  orderBy,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "../../context/AuthContext";
@@ -37,22 +38,13 @@ function Users() {
   const searchQuery = query(userRef, where("displayName", "==", searchUser));
 
   //Handle Search
-  const getUsersDetail = async (users) => {
-    console.log("chatUsers", users);
-
-    if (users[0] === currentUserId) {
-      const docRef = doc(db, "users", users[1]);
-      const userDetails = await getDoc(docRef);
-      return userDetails.data();
-    } else {
-      const docRef = doc(db, "users", users[0]);
-      const userDetails = await getDoc(docRef);
-      return userDetails.data();
-    }
-  };
   const fetchConversations = (currUserId) => {
     const docRef = collection(db, "chats");
-    const q = query(docRef, where("users", "array-contains", currUserId));
+    const q = query(
+      docRef,
+      where("users", "array-contains", currUserId),
+      orderBy("updatedAt", "desc")
+    );
     const unsub = onSnapshot(q, (snap) => {
       if (!snap.empty) {
         const data = snap.docs.map((doc) => ({
@@ -211,7 +203,10 @@ function Users() {
                 }
                 user={c.users}
                 chatid={c.docId}
+                seen={c.messages.seen}
                 message={c.messages[c.messages?.length - 1].body}
+                updatedAt={c.updatedAt}
+                messagesLength={c.messages.length}
               />
               <Divider
                 component="li"

@@ -90,6 +90,7 @@ function Messages() {
                 displayName: currentUser.displayName,
               },
             ],
+            updatedAt: new Date(),
             messages: [
               {
                 sender: currentUser.uid,
@@ -103,6 +104,7 @@ function Messages() {
         } else {
           docSnap.docs.forEach(async (doc) => {
             await updateDoc(doc.ref, {
+              updatedAt: new Date(),
               messages: arrayUnion({
                 sender: currentUser.uid,
                 receiver: selectedUser.userId,
