@@ -53,14 +53,14 @@ function UserCard({
           />
         ) : (
           <>
-            <Typography variant="subtitle2" component={"span"}>
+            <Badge badgeContent={messagesLength} color="secondary" />
+            <Typography
+              variant="subtitle2"
+              component={"span"}
+              sx={{ marginTop: 2 }}
+            >
               {moment(updatedAt.toDate()).calendar()}
             </Typography>
-            <Badge
-              badgeContent={messagesLength}
-              color="secondary"
-              sx={{ marginTop: 2 }}
-            />
           </>
         )}
       </Box>
