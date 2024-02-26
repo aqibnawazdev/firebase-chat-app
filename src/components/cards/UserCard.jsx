@@ -6,6 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Badge from "@mui/material/Badge";
 import moment from "moment";
+import { Padding } from "@mui/icons-material";
 function UserCard({
   user,
   id,
@@ -46,24 +47,30 @@ function UserCard({
           alignItems: "center",
         }}
       >
-        {seen &&
-          (seen ? (
-            <Avatar
-              src="./images/tick-double.png"
-              sx={{ width: 18, height: 18 }}
+        {seen === true ? (
+          <Avatar
+            src="./images/tick-double.png"
+            sx={{ width: 18, height: 18 }}
+          />
+        ) : (
+          <>
+            <Badge
+              badgeContent={messagesLength}
+              color="secondary"
+              sx={{ marginRight: "12px" }}
             />
-          ) : (
-            <>
-              <Badge badgeContent={messagesLength} color="secondary" />
+            {updatedAt && (
               <Typography
                 variant="subtitle2"
                 component={"span"}
                 sx={{ marginTop: 2 }}
               >
+                {" "}
                 {moment(updatedAt.toDate()).calendar()}
               </Typography>
-            </>
-          ))}
+            )}
+          </>
+        )}
       </Box>
     </Card>
   );

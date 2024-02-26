@@ -224,24 +224,3 @@ function Users() {
 }
 
 export default Users;
-
-// useEffect(() => {
-// const getUser = async () => {
-//   const { currentUser } = await getAuth();
-//   const displayName = await currentUser.displayName;
-//   const getAllUserQuery = await query(
-//     userRef,
-//     where("displayName", "!=", displayName)
-//   );
-//   const unsubscribe = onSnapshot(getAllUserQuery, (querySnapshot) => {
-//     const users = [];
-//     querySnapshot.forEach((doc) => {
-//       users.push(doc.data());
-//     });
-//     setAllUsers(users);
-//   });
-// };
-// getUser();
-
-//   return () => {};
-// }, []);
