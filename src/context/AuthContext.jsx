@@ -13,28 +13,41 @@ export const AuthContextProvider = ({ children }) => {
   const [chat, setChat] = useState(null);
   //User Selection....
 
-  const handleUserSelect = async (selectedUser, docId) => {
+  const handleUserSelect = async (selectedUser, chatId) => {
     dispatch({ type: "SELECT_USER", payload: selectedUser });
     console.log("selectedUserId ", selectedUser.userId);
     // console.log("docId ", docId);
+    if (!chatId) {
+      const conversationId =
+        user.uid > selectedUser.userId
+          ? user.uid + selectedUser.userId
+          : selectedUser.userId + user.uid;
+      const collRef = collection(db, "chats");
+      const chatQuery = query(
+        collRef,
+        where("conversationId", "==", conversationId)
+      );
+      // const docRef = doc(db, "chats", docId);
+      const unsub = onSnapshot(chatQuery, async (snap) => {
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          setChat(data);
+        });
+      });
+    } else {
+      const collRef = collection(db, "chats");
+      const chatQuery = query(collRef, where("conversationId", "==", chatId));
+      // const docRef = doc(db, "chats", docId);
+
+      const unsub = onSnapshot(chatQuery, async (snap) => {
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          setChat(data);
+        });
+      });
+    }
+
     const { userId } = selectedUser;
-    const docRef = doc(db, "chats", docId);
-    // const q = query(
-    //   docRef,
-    //   where("users", "array-contains", selectedUser.userId)
-    // );
-    // const docQuery = query(docRef, where("docId", "==", docId));
-    const unsub = onSnapshot(docRef, async (snap) => {
-      console.log(snap.data());
-      if (!snap.empty) {
-        const data = snap.data();
-        // const [messages] = data
-        //   ?.filter((c, i) => c.users[1] === user.uid)
-        //   .map((m) => m.messages);
-        // console.log("chat Data ", data);
-        setChat(data);
-      }
-    });
   };
 
   useEffect(() => {

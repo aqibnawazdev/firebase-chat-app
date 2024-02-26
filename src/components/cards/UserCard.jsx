@@ -4,7 +4,6 @@ import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
 function UserCard({ user, id, message, userName, photoURL, chatid }) {
-  console.log(user, "user");
   return (
     <Card
       elevation={0}
@@ -19,10 +18,10 @@ function UserCard({ user, id, message, userName, photoURL, chatid }) {
         avatar={
           <Avatar
             aria-label="recipe"
-            src={user.photoURL || "./images/user-billgate.png"}
+            src={photoURL || "./images/user-billgate.png"}
           />
         }
-        title={user.displayName}
+        title={userName}
         subheader={message}
       />
       <Box

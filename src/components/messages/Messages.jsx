@@ -29,15 +29,14 @@ import { onAuthStateChanged } from "firebase/auth";
 function Messages() {
   const [message, setMessage] = useState("");
   const [allChat, setAllChat] = useState(null);
-  const [currUserId, setCurrUserId] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const { selectedUser, chat } = useContext(AuthContext);
 
   const ref = useRef(null);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
-        const uid = user.uid;
-        setCurrUserId(uid);
+        setCurrentUser(user);
       } else {
       }
     });
@@ -59,25 +58,32 @@ function Messages() {
       const docuRef = collection(db, "chats");
 
       console.log("selecteduserId", selectedUser.userId);
-      console.log("Current userId", currUserId);
+      console.log("Current userId", currentUser.uid);
 
       const q = query(
         docuRef,
         where("users", "array-contains", selectedUser.userId)
       );
+      let chatId =
+        currentUser.uid > selectedUser.userId
+          ? currentUser.uid + selectedUser.userId
+          : selectedUser.userId + currentUser.uid;
 
-      await getDocs(q).then(async (docSnap) => {
+      const q2 = query(docuRef, where("conversationId", "==", chatId));
+      await getDocs(q2).then(async (docSnap) => {
         console.log("empty", docSnap.empty);
         if (docSnap.empty) {
           await addDoc(docuRef, {
-            users: [selectedUser.userId, currUserId],
+            users: [currentUser.uid, selectedUser.userId],
+            conversationId:
+              currentUser.uid > selectedUser.userId
+                ? currentUser.uid + selectedUser.userId
+                : selectedUser.userId + currentUser.uid,
             createdAt: new Date(),
             messages: [
               {
-                sender: currUserId,
+                sender: currentUser.uid,
                 receiver: selectedUser.userId,
-                receiverName: selectedUser.displayName,
-                receiverImg: selectedUser.photoURL,
                 body: message,
                 seen: false,
                 sendAt: new Date(),
@@ -88,10 +94,8 @@ function Messages() {
           docSnap.docs.forEach(async (doc) => {
             await updateDoc(doc.ref, {
               messages: arrayUnion({
-                sender: currUserId,
+                sender: currentUser.uid,
                 receiver: selectedUser.userId,
-                receiverName: selectedUser.displayName,
-                receiverImg: selectedUser.photoURL,
                 body: message,
                 seen: false,
                 sendAt: new Date(),
@@ -153,7 +157,7 @@ function Messages() {
       >
         {chat &&
           chat?.messages.map((m, i) => (
-            <Message key={m.sendAt} currUserId={currUserId} message={m} />
+            <Message key={m.sendAt} currUserId={currentUser.uid} message={m} />
           ))}
         <div ref={ref} />
       </Box>
