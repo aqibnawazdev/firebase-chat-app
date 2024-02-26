@@ -67,7 +67,7 @@ export default function Register() {
     const data = new FormData(event.currentTarget);
     const email = data.get("email");
     const password = data.get("password");
-    const name = data.get("name");
+    const name = data.get("name").replaceAll(" ", "").toLowerCase();
     const file = data.get("profile-pic");
 
     try {

@@ -35,7 +35,10 @@ function Users() {
     useContext(AuthContext);
   const [currentUserId, setCurrentUserId] = useState(null);
   const userRef = collection(db, "users");
-  const searchQuery = query(userRef, where("displayName", "==", searchUser));
+  const searchQuery = query(
+    userRef,
+    where("displayName", "==", searchUser.replace(" ", "").toLowerCase())
+  );
 
   //Handle Search
   const fetchConversations = (currUserId) => {

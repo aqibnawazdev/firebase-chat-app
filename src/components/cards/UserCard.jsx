@@ -46,7 +46,7 @@ function UserCard({
           alignItems: "center",
         }}
       >
-        {seen ? (
+        {seen && seen ? (
           <Avatar
             src="./images/tick-double.png"
             sx={{ width: 18, height: 18 }}
