@@ -37,7 +37,7 @@ function Users() {
   const userRef = collection(db, "users");
   const searchQuery = query(
     userRef,
-    where("displayName", "==", searchUser.replace(" ", "").toLowerCase())
+    where("displayName", "==", searchUser.replaceAll(" ", "").toLowerCase())
   );
 
   //Handle Search

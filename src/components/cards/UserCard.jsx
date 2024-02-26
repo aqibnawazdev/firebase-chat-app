@@ -46,23 +46,24 @@ function UserCard({
           alignItems: "center",
         }}
       >
-        {seen && seen ? (
-          <Avatar
-            src="./images/tick-double.png"
-            sx={{ width: 18, height: 18 }}
-          />
-        ) : (
-          <>
-            <Badge badgeContent={messagesLength} color="secondary" />
-            <Typography
-              variant="subtitle2"
-              component={"span"}
-              sx={{ marginTop: 2 }}
-            >
-              {moment(updatedAt.toDate()).calendar()}
-            </Typography>
-          </>
-        )}
+        {seen &&
+          (seen ? (
+            <Avatar
+              src="./images/tick-double.png"
+              sx={{ width: 18, height: 18 }}
+            />
+          ) : (
+            <>
+              <Badge badgeContent={messagesLength} color="secondary" />
+              <Typography
+                variant="subtitle2"
+                component={"span"}
+                sx={{ marginTop: 2 }}
+              >
+                {moment(updatedAt.toDate()).calendar()}
+              </Typography>
+            </>
+          ))}
       </Box>
     </Card>
   );
