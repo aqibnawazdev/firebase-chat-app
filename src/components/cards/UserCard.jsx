@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import Avatar from "@mui/material/Avatar";
-function UserCard({ user, id, message, userName, photoURL }) {
+function UserCard({ user, id, message, userName, photoURL, chatid }) {
   return (
     <Card
       elevation={0}
@@ -21,8 +21,7 @@ function UserCard({ user, id, message, userName, photoURL }) {
             src={photoURL || "./images/user-billgate.png"}
           />
         }
-        // title={id || "user"}
-        title={userName || "user"}
+        title={userName}
         subheader={message}
       />
       <Box

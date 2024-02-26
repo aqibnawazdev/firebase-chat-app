@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../firebase.config.js";
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 
 import { userReducer } from "./userReducer.js";
 
@@ -13,28 +13,41 @@ export const AuthContextProvider = ({ children }) => {
   const [chat, setChat] = useState(null);
   //User Selection....
 
-  const handleUserSelect = async (selectedUser) => {
+  const handleUserSelect = async (selectedUser, chatId) => {
     dispatch({ type: "SELECT_USER", payload: selectedUser });
-    console.log(selectedUser.userId);
-    const { userId } = selectedUser;
-    const docRef = collection(db, "chats");
-    const q = query(
-      docRef,
-      where("users", "array-contains", selectedUser.userId)
-    );
-    const unsub = onSnapshot(q, async (snap) => {
-      if (!snap.empty) {
-        const data = snap.docs.map((doc) => ({
-          ...doc.data(),
-          docId: doc.id,
-        }));
-        const [messages] = data
-          ?.filter((c, i) => c.users[1] === user.uid)
-          .map((m) => m.messages);
+    console.log("selectedUserId ", selectedUser.userId);
+    // console.log("docId ", docId);
+    if (!chatId) {
+      const conversationId =
+        user.uid > selectedUser.userId
+          ? user.uid + selectedUser.userId
+          : selectedUser.userId + user.uid;
+      const collRef = collection(db, "chats");
+      const chatQuery = query(
+        collRef,
+        where("conversationId", "==", conversationId)
+      );
+      // const docRef = doc(db, "chats", docId);
+      const unsub = onSnapshot(chatQuery, async (snap) => {
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          setChat(data);
+        });
+      });
+    } else {
+      const collRef = collection(db, "chats");
+      const chatQuery = query(collRef, where("conversationId", "==", chatId));
+      // const docRef = doc(db, "chats", docId);
 
-        setChat(messages);
-      }
-    });
+      const unsub = onSnapshot(chatQuery, async (snap) => {
+        snap.docs.forEach((d) => {
+          const data = d.data();
+          setChat(data);
+        });
+      });
+    }
+
+    const { userId } = selectedUser;
   };
 
   useEffect(() => {
