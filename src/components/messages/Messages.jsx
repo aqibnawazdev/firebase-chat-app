@@ -31,7 +31,7 @@ function Messages() {
   const [allChat, setAllChat] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const { selectedUser, chat } = useContext(AuthContext);
-
+  const [err, setError] = useState("");
   const ref = useRef(null);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -54,6 +54,10 @@ function Messages() {
 
   const handleMessageSent = async (e) => {
     e.preventDefault();
+    if (message.length < 1) {
+      setError("Invalid message...");
+      return;
+    }
     try {
       const docuRef = collection(db, "chats");
 
@@ -196,6 +200,13 @@ function Messages() {
           bottom: "0px",
         }}
       >
+        <Typography
+          variant="h1"
+          color="red"
+          sx={{ position: "fixed", bottom: "50px" }}
+        >
+          {err && err}
+        </Typography>
         <Box
           component="form"
           onSubmit={(e) => handleMessageSent(e)}
@@ -208,7 +219,9 @@ function Messages() {
             placeholder="Type you message here..."
             inputProps={{ "aria-label": "Type you message here..." }}
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value), setError("");
+            }}
           />
           <IconButton
             type="submit"
