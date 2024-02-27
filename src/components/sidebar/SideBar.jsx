@@ -33,9 +33,9 @@ function SideBar() {
           }}
         >
           <UserAvatar srcPath={user.photoURL} alt="" />
-          <Typography color={"white"} variant="body2">
+          {/* <Typography color={"white"} variant="body2">
             {user.displayName}
-          </Typography>
+          </Typography> */}
         </IconButton>
 
         <Stack marginTop={2}>
