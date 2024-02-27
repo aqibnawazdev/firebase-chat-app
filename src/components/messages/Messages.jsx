@@ -55,7 +55,6 @@ function Messages() {
   const handleMessageSent = async (e) => {
     e.preventDefault();
     if (message.length < 1) {
-      setError("Invalid message...");
       return;
     }
     try {
