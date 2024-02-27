@@ -60,10 +60,6 @@ function Messages() {
     }
     try {
       const docuRef = collection(db, "chats");
-
-      console.log("selecteduserId", selectedUser.userId);
-      console.log("Current userId", currentUser.uid);
-
       const q = query(
         docuRef,
         where("users", "array-contains", selectedUser.userId)
@@ -75,7 +71,6 @@ function Messages() {
 
       const q2 = query(docuRef, where("conversationId", "==", chatId));
       await getDocs(q2).then(async (docSnap) => {
-        console.log("empty", docSnap.empty);
         if (docSnap.empty) {
           await addDoc(docuRef, {
             users: [currentUser.uid, selectedUser.userId],
@@ -123,9 +118,7 @@ function Messages() {
 
       // fetchChat();
       setMessage("");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <MessagesContainer>

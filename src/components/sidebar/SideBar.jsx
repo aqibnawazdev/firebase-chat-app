@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import SideBarContainer from "../containers/SideBarContainer";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
 import UserAvatar from "../avatar/UserAvatar";
-import { Home, MessageRounded } from "@mui/icons-material";
 import { AuthContext } from "../../context/AuthContext";
 import { auth } from "../../../firebase.config";
 import { signOut } from "firebase/auth";
@@ -16,12 +14,9 @@ function SideBar() {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        console.log("Logged out successfully..");
         navigate("/login");
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   return (
     <SideBarContainer>
@@ -33,9 +28,6 @@ function SideBar() {
           }}
         >
           <UserAvatar srcPath={user.photoURL} alt="" />
-          {/* <Typography color={"white"} variant="body2">
-            {user.displayName}
-          </Typography> */}
         </IconButton>
 
         <Stack marginTop={2}>

@@ -12,9 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
 
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -28,7 +26,6 @@ import {
 } from "firebase/auth";
 export default function Login() {
   const showToastMessage = (message) => {
-    console.log("mesage", message);
     if (message === "Logged in Successfully...") {
       toast.success(message, {
         position: "top-right",

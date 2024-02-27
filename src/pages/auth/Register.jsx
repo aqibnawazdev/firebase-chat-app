@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -10,7 +9,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Paper from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -23,14 +21,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-  Timestamp,
-} from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { AuthContext } from "../../context/AuthContext";
 
 const defaultTheme = createTheme();
@@ -110,7 +101,6 @@ export default function Register() {
         }, 2000);
       }
     } catch (error) {
-      const errorCode = error.code;
       const errorMessage = error.message;
       showToastMessage(errorMessage);
     }
