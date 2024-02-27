@@ -31,7 +31,7 @@ function Messages() {
   const [allChat, setAllChat] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const { selectedUser, chat } = useContext(AuthContext);
-
+  const [err, setError] = useState("");
   const ref = useRef(null);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -54,12 +54,12 @@ function Messages() {
 
   const handleMessageSent = async (e) => {
     e.preventDefault();
+    if (message.length < 1) {
+      setError("Invalid message...");
+      return;
+    }
     try {
       const docuRef = collection(db, "chats");
-
-      console.log("selecteduserId", selectedUser.userId);
-      console.log("Current userId", currentUser.uid);
-
       const q = query(
         docuRef,
         where("users", "array-contains", selectedUser.userId)
@@ -71,7 +71,6 @@ function Messages() {
 
       const q2 = query(docuRef, where("conversationId", "==", chatId));
       await getDocs(q2).then(async (docSnap) => {
-        console.log("empty", docSnap.empty);
         if (docSnap.empty) {
           await addDoc(docuRef, {
             users: [currentUser.uid, selectedUser.userId],
@@ -119,9 +118,7 @@ function Messages() {
 
       // fetchChat();
       setMessage("");
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <MessagesContainer>
@@ -172,8 +169,8 @@ function Messages() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "89vh",
-          width: "50%",
+          height: "90vh",
+          width: "60%",
           overflow: "auto",
           position: "fixed",
           bottom: "70px",
@@ -191,12 +188,18 @@ function Messages() {
         component="div"
         sx={{
           width: "100%",
-          height: "10vh",
-          // backgroundColor: "red",
+          height: "8vh",
           position: "fixed",
           bottom: "0px",
         }}
       >
+        <Typography
+          variant="h1"
+          color="red"
+          sx={{ position: "fixed", bottom: "50px" }}
+        >
+          {err && err}
+        </Typography>
         <Box
           component="form"
           onSubmit={(e) => handleMessageSent(e)}
@@ -209,7 +212,9 @@ function Messages() {
             placeholder="Type you message here..."
             inputProps={{ "aria-label": "Type you message here..." }}
             value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => {
+              setMessage(e.target.value), setError("");
+            }}
           />
           <IconButton
             type="submit"

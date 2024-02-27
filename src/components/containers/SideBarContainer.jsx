@@ -6,13 +6,12 @@ function SideBarContainer({ children }) {
     <Grid
       item
       container
-      margin={2}
+      // margin={2}
       direction={"column"}
       xs={1}
       bgcolor={colorObject.sidebarBgPrimary}
-      height={"97%"}
+      height={"100%"}
       sx={(theme) => ({
-        borderRadius: theme.shape.borderRadius + 2,
         marginLeft: "0px",
         marginRight: "0px",
       })}

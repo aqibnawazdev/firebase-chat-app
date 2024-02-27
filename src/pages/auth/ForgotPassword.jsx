@@ -11,10 +11,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Link } from "react-router-dom";
 import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
-import { Facebook, Google } from "@mui/icons-material";
-import IconButton from "@mui/material/IconButton";
+import { Google } from "@mui/icons-material";
 import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -57,7 +55,6 @@ export default function ForgotPassword() {
     const auth = getAuth();
     sendPasswordResetEmail(auth, email)
       .then((n) => {
-        console.log(n);
         showToastMessage("Success, Check you email inbox");
         setIsResetLinkSent(true);
       })

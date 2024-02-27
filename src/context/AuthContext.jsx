@@ -1,7 +1,7 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../../firebase.config.js";
 import React, { createContext, useEffect, useReducer, useState } from "react";
-import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 
 import { userReducer } from "./userReducer.js";
 
@@ -15,7 +15,6 @@ export const AuthContextProvider = ({ children }) => {
 
   const handleUserSelect = async (selectedUser, chatId) => {
     dispatch({ type: "SELECT_USER", payload: selectedUser });
-    console.log("selectedUserId ", selectedUser.userId);
     setChat(null);
     // console.log("docId ", docId);
     if (!chatId) {
@@ -47,8 +46,6 @@ export const AuthContextProvider = ({ children }) => {
         });
       });
     }
-
-    const { userId } = selectedUser;
   };
 
   useEffect(() => {

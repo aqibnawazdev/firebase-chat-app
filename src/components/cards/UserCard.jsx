@@ -26,6 +26,8 @@ function UserCard({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
+        position: "relative",
+        margin: "10px 0px 0px 0px",
       }}
     >
       <CardHeader
@@ -50,14 +52,22 @@ function UserCard({
         {seen === true ? (
           <Avatar
             src="./images/tick-double.png"
-            sx={{ width: 18, height: 18 }}
+            sx={{ width: 19, height: 19 }}
           />
         ) : (
           <>
             <Badge
               badgeContent={messagesLength}
               color="secondary"
-              sx={{ marginRight: "12px" }}
+              sx={{
+                marginRight: "12px",
+                position: "absolute",
+                left: "15px",
+                top: "16px",
+                width: "2px",
+                height: "2px",
+                fontSize: "2px",
+              }}
             />
             {updatedAt && (
               <Typography

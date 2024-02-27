@@ -1,16 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UsersContainer from "../containers/UsersContainer";
-import { Grid, Typography, Stack, Box } from "@mui/material";
+import { Grid, Typography, Box } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
 import SearchIcon from "@mui/icons-material/Search";
 import Divider from "@mui/material/Divider";
 
-import {
-  fontFamilies,
-  typography,
-} from "../../Theme/Components-Theme/typography";
+import { fontFamilies } from "../../Theme/Components-Theme/typography";
 import UserCard from "../cards/UserCard";
 import { auth, db } from "../../../firebase.config";
 import {
@@ -19,11 +16,9 @@ import {
   where,
   getDocs,
   onSnapshot,
-  doc,
-  getDoc,
   orderBy,
 } from "firebase/firestore";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { AuthContext } from "../../context/AuthContext";
 function Users() {
   const [searchUser, setSearchUser] = useState("");
@@ -31,8 +26,7 @@ function Users() {
   const [search, setSearch] = useState(false);
   const [err, setErr] = useState(null);
   const [conversation, setConversations] = useState(null);
-  const { user, handleUserSelect, chat, dispatch, handleChatSelect } =
-    useContext(AuthContext);
+  const { handleUserSelect } = useContext(AuthContext);
   const [currentUserId, setCurrentUserId] = useState(null);
   const userRef = collection(db, "users");
   const searchQuery = query(
@@ -58,7 +52,6 @@ function Users() {
       }
     });
   };
-  console.log("Conversations ", conversation);
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -86,19 +79,16 @@ function Users() {
   };
 
   const handlesSearchSelect = (selectedUser) => {
-    console.log("seledted user", selectedUser);
     handleUserSelect(selectedUser);
   };
 
   const handleChatUserSelect = async (selectedUser, chatId) => {
     const selectedUserId = selectedUser;
-    console.log("selected User", selectedUserId);
 
     const userRef = collection(db, "users");
     const searchQuery = query(userRef, where("userId", "==", selectedUserId));
     const snapshot = await getDocs(searchQuery);
     if (snapshot.docs.length === 0) {
-      console.log("User Not found..");
     }
     snapshot.docs.forEach((doc) => {
       handleUserSelect(doc.data(), chatId);
@@ -114,9 +104,9 @@ function Users() {
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
-            borderRadius: "20px",
-            width: 370,
+            width: "370px",
             marginBottom: 4,
+            marginTop: "10px",
           }}
           onSubmit={(e) => handleSearch(e)}
         >
@@ -145,7 +135,7 @@ function Users() {
               p: "2px 4px",
               display: "flex",
               alignItems: "start",
-              borderRadius: "20px",
+              // borderRadius: "20px",
               width: 370,
               flexDirection: "column",
               padding: 2,
@@ -172,8 +162,8 @@ function Users() {
             p: "2px 4px",
             display: "flex",
             alignItems: "start",
-            borderRadius: "20px",
-            width: 370,
+            // borderRadius: "20px",
+            width: "100%",
             flexDirection: "column",
             padding: 2,
           }}
