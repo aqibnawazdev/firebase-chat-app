@@ -7,7 +7,7 @@ function MessagesContainer({ children }) {
     <Paper
       margin={2}
       sx={(theme) => ({
-        height: "97%",
+        height: "96vh",
         borderRadius: theme.shape.borderRadius + 2,
         width: "50%",
         margin: "12px 0px",

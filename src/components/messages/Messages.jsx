@@ -132,7 +132,10 @@ function Messages() {
           width: "100%",
           padding: "10px",
           height: "70px",
-          // backgroundColor: "#f3f3f3",
+          backgroundColor: "#f3f3f3",
+          position: "sticky",
+          top: "-10px",
+          zIndex: "999",
         }}
       >
         <UserAvatar srcPath={selectedUser?.photoURL} />
@@ -156,15 +159,25 @@ function Messages() {
       </Stack>
       <Box
         component="div"
-        sx={{ width: "100%", height: ".5px", backgroundColor: "#B4ABAB" }}
+        sx={{
+          width: "100%",
+          height: ".5px",
+          backgroundColor: "#B4ABAB",
+          position: "sticky",
+          top: "70px",
+        }}
       ></Box>
       <Box
         component="div"
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "800px",
+          height: "89vh",
+          width: "50%",
           overflow: "auto",
+          position: "fixed",
+          bottom: "70px",
+          top: "10px",
         }}
       >
         {chat &&
@@ -175,26 +188,37 @@ function Messages() {
       </Box>
 
       <Box
-        component="form"
-        onSubmit={(e) => handleMessageSent(e)}
-        sx={formStyles}
+        component="div"
+        sx={{
+          width: "100%",
+          height: "10vh",
+          // backgroundColor: "red",
+          position: "fixed",
+          bottom: "0px",
+        }}
       >
-        <IconButton sx={{ p: "10px" }} aria-label="attach-file">
-          <AttachFileIcon />
-        </IconButton>
-        <InputBase
-          placeholder="Type you message here..."
-          inputProps={{ "aria-label": "Type you message here..." }}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <IconButton
-          type="submit"
-          aria-label="search"
-          sx={{ marginLeft: "auto" }}
+        <Box
+          component="form"
+          onSubmit={(e) => handleMessageSent(e)}
+          sx={formStyles}
         >
-          <SendIcon />
-        </IconButton>
+          <IconButton sx={{ p: "10px" }} aria-label="attach-file">
+            <AttachFileIcon />
+          </IconButton>
+          <InputBase
+            placeholder="Type you message here..."
+            inputProps={{ "aria-label": "Type you message here..." }}
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <IconButton
+            type="submit"
+            aria-label="search"
+            sx={{ marginLeft: "auto" }}
+          >
+            <SendIcon />
+          </IconButton>
+        </Box>
       </Box>
     </MessagesContainer>
   );
@@ -205,13 +229,13 @@ export default Messages;
 var formStyles = {
   width: "40%",
   backgroundColor: "#EFF6FC",
-  position: "fixed",
-  bottom: "20px",
+  position: "sticky",
+  bottom: "0px",
   borderRadius: "17px",
   padding: "0px",
   paddingRight: "10px",
   display: "flex",
-  marginBottom: "10px",
+  // marginBottom: "10px",
   marginLeft: "20px",
   height: "40px",
 };
