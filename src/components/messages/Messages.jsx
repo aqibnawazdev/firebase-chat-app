@@ -172,8 +172,8 @@ function Messages() {
         sx={{
           display: "flex",
           flexDirection: "column",
-          height: "89vh",
-          width: "50%",
+          height: "90vh",
+          width: "60%",
           overflow: "auto",
           position: "fixed",
           bottom: "70px",
@@ -191,8 +191,7 @@ function Messages() {
         component="div"
         sx={{
           width: "100%",
-          height: "10vh",
-          // backgroundColor: "red",
+          height: "8vh",
           position: "fixed",
           bottom: "0px",
         }}

@@ -5,12 +5,9 @@ import Paper from "@mui/material/Paper";
 function MessagesContainer({ children }) {
   return (
     <Paper
-      margin={2}
       sx={(theme) => ({
-        height: "96vh",
-        borderRadius: theme.shape.borderRadius + 2,
-        width: "50%",
-        margin: "12px 0px",
+        height: "100vh",
+        width: "60%",
         paddingLeft: "0px",
         position: "relative",
         overflow: "hidden",
@@ -23,7 +20,6 @@ function MessagesContainer({ children }) {
         bgcolor={colorObject.bgWhite}
         sx={{
           width: "100%",
-          borderRadius: 18,
           marginLeft: "0px",
           padding: "0px",
         }}
