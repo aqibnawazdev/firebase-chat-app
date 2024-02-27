@@ -1,4 +1,5 @@
 import * as React from "react";
+import "react-toastify/dist/ReactToastify.css";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,7 +18,6 @@ import IconButton from "@mui/material/IconButton";
 
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 const defaultTheme = createTheme();
 import { Google } from "@mui/icons-material";
 import { auth } from "../../../firebase.config";
@@ -28,10 +28,11 @@ import {
 } from "firebase/auth";
 export default function Login() {
   const showToastMessage = (message) => {
+    console.log("mesage", message);
     if (message === "Logged in Successfully...") {
       toast.success(message, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -40,7 +41,7 @@ export default function Login() {
     } else {
       toast.error(message, {
         position: "top-right",
-        autoClose: 3000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -61,13 +62,16 @@ export default function Login() {
         const user = userCredential.user;
         if (user) {
           showToastMessage("Logged in Successfully...");
-          navigate("/");
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         }
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+        showToastMessage(errorMessage);
       });
   };
 
@@ -116,7 +120,6 @@ export default function Login() {
             Sign in
           </Typography>
 
-          <ToastContainer />
           <Box
             component="form"
             onSubmit={(e) => {
@@ -155,6 +158,7 @@ export default function Login() {
             >
               Sign In
             </Button>
+            <ToastContainer />
             <Grid container>
               <Grid item xs>
                 <Link to="/passwordreset" variant="body2">
@@ -171,14 +175,14 @@ export default function Login() {
             <Typography textAlign="center" color="secondary">
               or
             </Typography>
-            <Stack spacing={2} sx={{ marginBottom: "20px", marginTop: "20px" }}>
+            {/* <Stack spacing={2} sx={{ marginBottom: "20px", marginTop: "20px" }}>
               <Item onClick={handleGoogleAuth}>
                 <IconButton aria-label="delete" disabled color="primary">
                   <Google />
                 </IconButton>
                 Singin with Google
               </Item>
-            </Stack>
+            </Stack> */}
           </Box>
         </Box>
       </Container>

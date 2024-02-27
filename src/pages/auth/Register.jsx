@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -50,6 +49,15 @@ export default function Register() {
         pauseOnHover: true,
         progress: undefined,
       });
+    } else if (message === "Please wait, while registering..!!!") {
+      toast.loading(message, {
+        position: "top-center",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        progress: undefined,
+      });
     } else {
       toast.error(message, {
         position: "top-right",
@@ -72,6 +80,7 @@ export default function Register() {
 
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
+      showToastMessage("Please wait, while registering..!!!");
       const userData = res.user;
       if (userData) {
         const metadata = {
@@ -92,10 +101,10 @@ export default function Register() {
               photoURL: userData?.photoURL,
               timeStamp: serverTimestamp(),
             });
-            showToastMessage("Registered sucessfully...");
           });
         });
 
+        showToastMessage("Registered sucessfully...");
         setTimeout(() => {
           navigate("/");
         }, 2000);
