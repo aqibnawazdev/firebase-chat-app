@@ -114,9 +114,9 @@ function Users() {
             p: "2px 4px",
             display: "flex",
             alignItems: "center",
-            borderRadius: "20px",
-            width: 370,
+            width: "370px",
             marginBottom: 4,
+            marginTop: "10px",
           }}
           onSubmit={(e) => handleSearch(e)}
         >
@@ -145,7 +145,7 @@ function Users() {
               p: "2px 4px",
               display: "flex",
               alignItems: "start",
-              borderRadius: "20px",
+              // borderRadius: "20px",
               width: 370,
               flexDirection: "column",
               padding: 2,
@@ -172,8 +172,8 @@ function Users() {
             p: "2px 4px",
             display: "flex",
             alignItems: "start",
-            borderRadius: "20px",
-            width: 370,
+            // borderRadius: "20px",
+            width: "100%",
             flexDirection: "column",
             padding: 2,
           }}

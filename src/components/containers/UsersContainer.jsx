@@ -9,9 +9,9 @@ function UsersContainer({ children }) {
       direction={"column"}
       alignContent={"center"}
       xs={2}
-      margin={1}
+      // margin={2}
       bgcolor={colorObject.bodyBgPrimary}
-      height={"100vh"}
+      height={"100%"}
       sx={(theme) => ({
         borderRadius: theme.shape.borderRadius,
         marginLeft: "0px",
