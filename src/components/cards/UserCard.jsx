@@ -27,7 +27,7 @@ function UserCard({
         alignItems: "center",
         justifyContent: "space-between",
         position: "relative",
-        margin: "10px 0px",
+        margin: "10px 0px 0px 0px",
       }}
     >
       <CardHeader
