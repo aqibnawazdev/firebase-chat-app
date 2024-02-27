@@ -239,22 +239,3 @@ var formStyles = {
   marginLeft: "20px",
   height: "40px",
 };
-
-// const { userId } = selectedUser;
-// const docRef = collection(db, "chats");
-// const q = query(docRef, where("users", "array-contains", user.uid));
-// const unsub = onSnapshot(q, async (snap) => {
-//   if (snap.empty) {
-//     await addDoc(docRef, {
-//       users: [userId, user.uid],
-//       createdAt: new Date(),
-//       messages: [],
-//     });
-//   } else {
-//     const data = snap.docs.map((doc) => ({
-//       ...doc.data(),
-//       docId: doc.id,
-//     }));
-//     dispatch({ type: "CHAT", payload: data[0] });
-//   }
-// });
